@@ -1,6 +1,7 @@
 package com.example.cashcard;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,13 @@ public class CashCardController {
                 .buildAndExpand(savedCashCard.id())
                 .toUri();
         return ResponseEntity.created(locationOfNewCashCard).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<CashCard>> findAll(){
+        Iterable<CashCard> listAllCashCards = cashCardRepository.findAll(); 
+
+        return ResponseEntity.ok(listAllCashCards);
     }
 
 }
