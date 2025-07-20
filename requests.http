@@ -1,2 +1,15 @@
 ### Teste GET
 http://localhost:8080/
+
+
+### Criar e capturar a Location
+# @name createCashCard
+POST http://localhost:8080/cashcards
+Content-Type: application/json
+
+{
+  "amount": 234.56
+}
+
+### Fazer GET no recurso criado
+GET {{createCashCard.response.headers.location}}
