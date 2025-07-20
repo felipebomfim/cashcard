@@ -4,6 +4,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,9 +37,8 @@ public class CashCardController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCashCard(@RequestBody CashCard newCashCardRequest, 
-        UriComponentsBuilder ucb
-    ) {
+    public ResponseEntity<Void> createCashCard(@RequestBody CashCard newCashCardRequest,
+            UriComponentsBuilder ucb) {
         CashCard savedCashCard = cashCardRepository.save(newCashCardRequest);
         URI locationOfNewCashCard = ucb
                 .path("cashcards/{id}")
@@ -46,10 +48,12 @@ public class CashCardController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<CashCard>> findAll(){
-        Iterable<CashCard> listAllCashCards = cashCardRepository.findAll(); 
-
-        return ResponseEntity.ok(listAllCashCards);
+    private ResponseEntity<List<CashCard>> findAll(Pageable pageable) {
+        Page<CashCard> page = cashCardRepository.findAll(
+                PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize()));
+        return ResponseEntity.ok(page.getContent());
     }
 
 }
